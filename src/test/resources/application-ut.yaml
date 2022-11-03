@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    type: org.h2.jdbcx.JdbcDataSource
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create

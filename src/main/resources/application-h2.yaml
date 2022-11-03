@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    type: org.h2.jdbcx.JdbcDataSource
+    url: ${javdb_url:/var/cache/jav.db}
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: never
+      platform: h2
+      continue-on-error: true

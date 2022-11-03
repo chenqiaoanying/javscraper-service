@@ -1,0 +1,36 @@
+logging:
+  level:
+    root: info
+    web: debug
+    reactor.netty.http.client: info
+
+http:
+  base-url:
+    fc2: https://adult.contents.fc2.com
+    jav321: https://www.jav321.com
+    javbus: https://www.javbus.com
+    javdb: https://javdb.com
+    mgstage: https://www.mgstage.com
+    xslist: https://xslist.org
+  compression-enabled: true
+  connection-timeout: 20000
+  socket-timeout: 20000
+  max-connections: 20
+  pool-name: webclient
+  retry:
+    max-attempts: 3
+    min-backoff: 5000
+    max-backoff: 10000
+    jitter-factor: 0.5
+
+spring:
+  profiles:
+    active: h2
+  codec:
+    max-in-memory-size: 20MB
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true

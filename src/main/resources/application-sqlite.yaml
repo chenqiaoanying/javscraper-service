@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    type: org.sqlite.javax.SQLiteConnectionPoolDataSource
+    url: jdbc:sqlite:jav.db
+  jpa:
+    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      mode: always
+      platform: sqlite
+      continue-on-error: true
