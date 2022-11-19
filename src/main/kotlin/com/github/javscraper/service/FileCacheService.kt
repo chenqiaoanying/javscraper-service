@@ -8,7 +8,7 @@ import java.time.Duration
 
 @Service
 class FileCacheService(
-    @Value("\${file_cache_dir:/var/cache/jav}") fileCacheLocation: String
+    @Value("\${cache_dir:/var/cache/jav}/file") fileCacheLocation: String
 ) {
     private val directory = File(fileCacheLocation)
 

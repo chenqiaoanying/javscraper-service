@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     type: org.h2.jdbcx.JdbcDataSource
-    url: ${javdb_url:/var/cache/jav.db}
+    url: jdbc:h2:file:${cache_dir:/var/cache/jav}/jav
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
