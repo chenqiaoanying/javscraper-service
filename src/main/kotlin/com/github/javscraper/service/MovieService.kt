@@ -1,7 +1,6 @@
 package com.github.javscraper.service
 
 import com.github.javscraper.data.FetchResultRepository
-import com.github.javscraper.data.MovieRepository
 import com.github.javscraper.data.entity.FetchResult
 import com.github.javscraper.data.entity.MovieEntity
 import com.github.javscraper.data.entity.Status
@@ -22,7 +21,6 @@ import kotlin.reflect.KClass
 @Service
 class MovieService(
     scrapers: List<Scraper>,
-    private val movieRepository: MovieRepository,
     private val fetchResultRepository: FetchResultRepository
 ) {
     private val logger = logger()
@@ -54,7 +52,7 @@ class MovieService(
 
     fun getMovie(index: MovieIndex): Mono<MovieEntity> {
         return index.movie.toMono()
-            .switchIfEmpty { movieRepository.findByNumberAndProvider(index.number.lowercase(), index.provider).toMono() }
+            .switchIfEmpty { fetchResultRepository.findByNumberAndProvider(index.number.lowercase(), index.provider)?.result.toMono() }
             .switchIfEmpty {
                 scrapers[index.provider]!!.getVideo(index)
                     .doOnNext { fetchResultRepository.save(FetchResult.loaded(it)) }
@@ -79,14 +77,17 @@ class MovieService(
     private fun doSearch(keyword: String): Flux<MovieIndex> {
         val javId = JavId.from(keyword) ?: throw IllegalArgumentException("Fail to parse keyword $keyword")
         val availableScrapers = scrapers.values.filter { it.canSearch(javId) }
-        return Mono.fromCallable { fetchResultRepository.findByNumber(javId.number) }
-            .map { it.ifEmpty { fetchResultRepository.findByNumberIn(javId.allPossibleNumbers) } }
+        return Mono
+            .fromCallable {
+                fetchResultRepository.findByNumber(javId.number)
+                    .ifEmpty { fetchResultRepository.findByNumberIn(javId.allPossibleNumbers) }
+            }
             .flatMapMany { fetchResults ->
                 val resultByProvider = fetchResults.associateBy { it.provider }
                 availableScrapers.toFlux()
                     .flatMap { scraper ->
                         val result = resultByProvider[scraper.name]
-                        if (result == null || result.status != Status.Nonexistent) {
+                        if (result == null || result.status !in arrayOf(Status.Nonexistent, Status.Loaded)) {
                             scraper.search(javId)
                                 .doOnSuccess { indexList ->
                                     if (indexList == null || indexList.isEmpty()) {

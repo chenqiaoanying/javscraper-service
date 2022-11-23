@@ -10,4 +10,4 @@ WORKDIR application
 COPY --from=builder application/spring-boot-loader/ ./
 COPY --from=builder application/dependencies/ ./
 COPY --from=builder application/application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT java ${VM_OPTIONS} org.springframework.boot.loader.JarLauncher

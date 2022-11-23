@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface FetchResultRepository : JpaRepository<FetchResult, FetchResultId> {
     fun findByNumber(number: String): Collection<FetchResult>
+    fun findByNumberAndProvider(number: String, provider: String): FetchResult?
     fun findByNumberIn(number: Collection<String>): Collection<FetchResult>
 }

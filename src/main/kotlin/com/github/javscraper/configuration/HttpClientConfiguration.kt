@@ -34,6 +34,7 @@ class HttpClientConfiguration(
                                 .maxConnections(properties.maxConnections)
                                 .build()
                         )
+                        .proxyWithSystemProperties()
                         .secure {
                             it.sslContext(SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build())
                         }

@@ -10,7 +10,7 @@ import reactor.tools.agent.ReactorDebugAgent
 
 @SpringBootApplication
 @EnableConfigurationProperties(HttpProperties::class)
-@EntityScan(basePackages = ["com.github.javscraper.service.model", "com.github.javscraper.data.entity"])
+@EntityScan(basePackages = ["com.github.javscraper.data.entity"])
 @EnableJpaRepositories(basePackages = ["com.github.javscraper.data"])
 class JavscraperServerApplication
 

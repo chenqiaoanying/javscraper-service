@@ -4,10 +4,16 @@
 docker run -d --name jav-service -p 8080:8080 cqay/jav-service
 ```
 
-config cache volumn
+config cache volume
 
 ```
 docker run -d --name jav-service -p 8080:8080 -v jav-cache:/var/cache/jav cqay/jav-service
+```
+
+with proxy
+
+```
+docker run -d --name jav-service -p 8080:8080 -e "VM_OPTIONS=-Dhttp.proxyHost=clash -Dhttp.proxyPort=7890" -v jav-cache:/var/cache/jav cqay/jav-service
 ```
 
 command use to test
