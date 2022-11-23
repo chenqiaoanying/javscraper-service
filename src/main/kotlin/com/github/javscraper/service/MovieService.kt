@@ -86,7 +86,7 @@ class MovieService(
                 availableScrapers.toFlux()
                     .flatMap { scraper ->
                         val result = resultByProvider[scraper.name]
-                        if (result == null || result.status == Status.Unloaded) {
+                        if (result == null || result.status != Status.Nonexistent) {
                             scraper.search(javId)
                                 .doOnSuccess { indexList ->
                                     if (indexList == null || indexList.isEmpty()) {
