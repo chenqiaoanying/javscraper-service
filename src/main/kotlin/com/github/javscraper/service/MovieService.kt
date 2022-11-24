@@ -4,7 +4,7 @@ import com.github.javscraper.data.FetchResultRepository
 import com.github.javscraper.data.entity.FetchResult
 import com.github.javscraper.data.entity.MovieEntity
 import com.github.javscraper.data.entity.Status
-import com.github.javscraper.extension.calculateLevenshteinDistanceIgnoreCase
+import com.github.javscraper.extension.levenshteinIgnoreCase
 import com.github.javscraper.extension.logger
 import com.github.javscraper.service.model.JavId
 import com.github.javscraper.service.model.MovieIndex
@@ -39,12 +39,12 @@ class MovieService(
     }
 
     fun search(keyword: String): Flux<MovieIndex> = doSearch(keyword)
-        .sort(Comparator.comparingInt { calculateLevenshteinDistanceIgnoreCase(it.number, keyword) })
+        .sort(Comparator.comparingInt { levenshteinIgnoreCase(it.number, keyword) })
 
     fun autoSearch(keyword: String): Mono<MovieEntity> =
         doSearch(keyword)
             .groupBy { it.number.lowercase() }
-            .min(Comparator.comparingInt { calculateLevenshteinDistanceIgnoreCase(it.key(), keyword) })
+            .min(Comparator.comparingInt { levenshteinIgnoreCase(it.key(), keyword) })
             .flatMapMany { it }
             .flatMap { getMovie(it).onErrorComplete() }
             .collectSortListByScraper()

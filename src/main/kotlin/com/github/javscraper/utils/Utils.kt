@@ -1,6 +1,6 @@
 package com.github.javscraper.utils
 
-import com.github.javscraper.extension.calculateLevenshteinDistanceIgnoreCase
+import com.github.javscraper.extension.levenshteinIgnoreCase
 
 // 7ABC-012
 private val serialNumber_1 = "^[0-9][a-z]+[-_a-z0-9]+$".toRegex(RegexOption.IGNORE_CASE)
@@ -36,4 +36,4 @@ private fun generateAllPossibleKeywords(originKeyword: String): Set<String> {
 
 fun getAllPossibleKeywords(originKeyword: String): List<String> =
     generateAllPossibleKeywords(originKeyword)
-        .sortedBy { calculateLevenshteinDistanceIgnoreCase(originKeyword, it) }
+        .sortedBy { levenshteinIgnoreCase(originKeyword, it) }

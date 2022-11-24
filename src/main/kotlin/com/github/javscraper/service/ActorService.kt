@@ -2,8 +2,8 @@ package com.github.javscraper.service
 
 import com.github.javscraper.data.ActorRepository
 import com.github.javscraper.data.entity.ActorEntity
-import com.github.javscraper.extension.calculateLevenshteinDistance
-import com.github.javscraper.extension.calculateLevenshteinDistanceIgnoreCase
+import com.github.javscraper.extension.levenshtein
+import com.github.javscraper.extension.levenshteinIgnoreCase
 import com.github.javscraper.service.model.ActorIndex
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -45,7 +45,7 @@ class ActorService(
             .flatMap { name ->
                 avatarService.findUriByName(name)
                     .switchIfEmpty {
-                        doSearch(name).min(Comparator.comparingInt { calculateLevenshteinDistance(it.name, name) })
+                        doSearch(name).min(Comparator.comparingInt { levenshtein(it.name, name) })
                             .mapNotNull<URI> { it.avatarUrl }
                     }
                     .map { name to it }
@@ -74,5 +74,5 @@ class ActorService(
             }
 
     private fun calculateNameDistance(actor: ActorEntity, allPossibleName: List<String>): Int =
-        (actor.aliases + actor.name).minOf { alias -> allPossibleName.minOf { possibleName -> calculateLevenshteinDistanceIgnoreCase(alias, possibleName) } }
+        (actor.aliases + actor.name).minOf { alias -> allPossibleName.minOf { possibleName -> levenshteinIgnoreCase(alias, possibleName) } }
 }

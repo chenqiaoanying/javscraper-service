@@ -1,6 +1,6 @@
 package com.github.javscraper.service.model
 
-import com.github.javscraper.extension.calculateLevenshteinDistanceIgnoreCase
+import com.github.javscraper.extension.levenshteinIgnoreCase
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
@@ -14,16 +14,17 @@ class JavIdTest {
 
     @Test
     fun testLevenshteinDistance() {
-        calculateLevenshteinDistanceIgnoreCase("", "") shouldBe 0
-        calculateLevenshteinDistanceIgnoreCase("abc", "") shouldBe 3
-        calculateLevenshteinDistanceIgnoreCase("", "abc") shouldBe 3
-        calculateLevenshteinDistanceIgnoreCase("abc", "bcd") shouldBe 2
-        calculateLevenshteinDistanceIgnoreCase("abc", "ABC") shouldBe 0
-        calculateLevenshteinDistanceIgnoreCase("ABC", "DEF") shouldBe 3
-        calculateLevenshteinDistanceIgnoreCase("ABC", "ABCD") shouldBe 1
-        calculateLevenshteinDistanceIgnoreCase("BCD", "ABCD") shouldBe 1
-        calculateLevenshteinDistanceIgnoreCase("ABCD", "ABC") shouldBe 1
-        calculateLevenshteinDistanceIgnoreCase("cba", "ABC") shouldBe 2
+        levenshteinIgnoreCase("", "") shouldBe 0
+        levenshteinIgnoreCase("abc", "") shouldBe 3
+        levenshteinIgnoreCase("", "abc") shouldBe 3
+        levenshteinIgnoreCase("abc", "bcd") shouldBe 2
+        levenshteinIgnoreCase("abc", "ABC") shouldBe 0
+        levenshteinIgnoreCase("ABC", "DEF") shouldBe 3
+        levenshteinIgnoreCase("ABC", "ABCD") shouldBe 1
+        levenshteinIgnoreCase("BCD", "ABCD") shouldBe 1
+        levenshteinIgnoreCase("ABCD", "ABC") shouldBe 1
+        levenshteinIgnoreCase("cba", "ABC") shouldBe 2
+        levenshteinIgnoreCase("ABW-286", "ABW-286-uncensored-nyap2p.com") shouldBe 22
     }
 
     @Test

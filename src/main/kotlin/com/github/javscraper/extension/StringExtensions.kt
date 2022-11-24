@@ -8,12 +8,12 @@ import java.time.format.DateTimeFormatter.ISO_DATE
 import java.time.format.DateTimeFormatter.ofPattern
 import java.time.format.DateTimeParseException
 
-fun calculateLevenshteinDistanceIgnoreCase(source1: String, source2: String): Int =
-    calculateLevenshteinDistance(source1.lowercase(), source2.lowercase())
+fun levenshteinIgnoreCase(source1: String, source2: String): Int =
+    levenshtein(source1.lowercase(), source2.lowercase())
 
-fun calculateLevenshteinDistance(source1: String, source2: String): Int {
+fun levenshtein(source1: String, source2: String): Int {
     if (source1.length < source2.length) {
-        return calculateLevenshteinDistance(source2, source1)
+        return levenshtein(source2, source1)
     }
     val source1Length = source1.length
     val source2Length = source2.length
@@ -27,7 +27,8 @@ fun calculateLevenshteinDistance(source1: String, source2: String): Int {
 
     // Calculate rows and columns distances
     for (i in 1..source1Length) {
-        var topLeftCost = i - 1
+        var topLeftCost = costs[0]
+        costs[0] = i
         for (j in 1..source2Length) {
             val match = if (source2[j - 1] == source1[i - 1]) 0 else 1
             val newCost = (topLeftCost + match)
@@ -39,34 +40,6 @@ fun calculateLevenshteinDistance(source1: String, source2: String): Int {
     }
 
     return costs[source2Length]
-}
-
-fun CharSequence.removeSuffixRecurrently(vararg suffixes: String): String {
-    var before: Int
-    do {
-        before = this.length
-        for (suffix in suffixes) {
-            this.removeSuffix(suffix)
-            if (this.length < before) {
-                break
-            }
-        }
-    } while (this.length < before)
-    return this.toString()
-}
-
-fun CharSequence.removePrefixRecurrently(vararg prefixes: String): String {
-    var before: Int
-    do {
-        before = this.length
-        for (prefix in prefixes) {
-            this.removePrefix(prefix)
-            if (this.length < before) {
-                break
-            }
-        }
-    } while (this.length < before)
-    return this.toString()
 }
 
 fun String.toLocalDateOrNull(dateTimeFormatter: DateTimeFormatter = ISO_DATE) =
